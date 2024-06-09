@@ -1,4 +1,4 @@
-import re
+import json
 import sys
 from datetime import datetime as dt
 
@@ -10,14 +10,18 @@ class LogAnalyzer:
     def parse_log_file(self):
         logs = []
         with open(self.log_file, 'r') as f:
-            for line in f:
-                match = re.match(r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) - (\w+): (.+)', line)
-                if match:
-                    logs.append({
-                        'timestamp': dt.strptime(match.group(1), '%Y-%m-%d %H:%M:%S'),
-                        'level': match.group(2),
-                        'message': match.group(3)
-                    })
+            log_line = f.readline()
+            while log_line:
+                log = json.loads(log_line)
+                for info in log.keys():
+                    if info not in ('time', 'level', 'msg'):
+                        log['msg'] += f' | {info}: {log[info]}'
+                logs.append({
+                    'timestamp': self.parse_timestamp(log['time']),
+                    'level': log['level'],
+                    'message': log['msg']
+                })
+                log_line = f.readline()
         return logs
     
     def filter_logs_by_timestamp(self, start, end):
@@ -29,9 +33,11 @@ class LogAnalyzer:
     @staticmethod
     def parse_timestamp(timestamp_str):
         try:
-            return dt.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
+            timestamp = dt.fromisoformat(timestamp_str)
+            formatted_timestamp = timestamp.strftime('%Y-%m-%d %H:%M:%S')
+            return formatted_timestamp
         except ValueError:
-            print(f"Invalid timestamp format: {timestamp_str}. Please use the format 'YYYY-MM-DD HH:MM:SS'")
+            print(f"Invalid timestamp format: {timestamp_str}. Please use ISO format (YYYY-MM-DDTHH:MM:SS)")
             sys.exit(1)
 
     def filter_logs_by_level(self, level):
@@ -78,10 +84,10 @@ def main():
             print(f'{log["timestamp"]} - {log["level"]}: {log["message"]}')
     elif len(sys.argv) == 3:
         filter_by = sys.argv[2]
-        if filter_by in ['ERROR', 'WARNING', 'INFO']:
-            filtered_logs = log_analyzer.filter_logs_by_level(filter_by)
+        if filter_by.upper() in ['ERROR', 'WARNING', 'INFO']:
+            filtered_logs = log_analyzer.filter_logs_by_level(filter_by.upper())
         else:
-            filtered_logs = log_analyzer.filter_logs_by_message(filter_by)
+            filtered_logs = log_analyzer.filter_logs_by_message(filter_by.lower())
         print('Filtered Logs:')
         for log in filtered_logs:
             print(f'{log["timestamp"]} - {log["level"]}: {log["message"]}')
