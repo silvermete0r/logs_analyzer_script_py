@@ -20,15 +20,9 @@ To run the Log Analyzer script, follow these steps:
    cd log-analyzer
    ```
 
-3. **Install Dependencies**: If you haven't already installed the required dependencies, do so using pip:
+3. **Prepare Log File**: Place your log file (e.g., `test.log`) in the project directory. Ensure that the log file follows the expected format (`YYYY-MM-DD HH:MM:SS - LEVEL: MESSAGE`) for the script to parse it correctly.
 
-   ```
-   pip install -r requirements.txt
-   ```
-
-4. **Prepare Log File**: Place your log file (e.g., `test.log`) in the project directory. Ensure that the log file follows the expected format (`YYYY-MM-DD HH:MM:SS - LEVEL: MESSAGE`) for the script to parse it correctly.
-
-5. **Run the Script**: Execute the script, passing the path to the log file as a command-line argument:
+4. **Run the Script**: Execute the script, passing the path to the log file as a command-line argument:
 
    ```
    python script.py test.log
@@ -36,7 +30,7 @@ To run the Log Analyzer script, follow these steps:
 
    This command will display a summary of the logs contained in the `test.log` file.
 
-6. **Additional Options**: You can also filter logs by timestamp, log level, or message content. Here are some examples:
+5. **Additional Options**: You can also filter logs by timestamp, log level, or message content. Here are some examples:
 
    - Filter logs by timestamp range:
 

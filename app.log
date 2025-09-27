@@ -1,0 +1,3 @@
+{"time": "2025-09-27T10:41:17.850005+05:00", "level": "INFO", "msg": "starting url-shortener", "env": "prod", "version": "123"}
+{"time": "2025-09-27T10:41:17.850005+05:00", "level": "WARNING", "msg": "low memory warning", "env": "prod", "version": "123"}
+{"time": "2025-09-27T10:41:17.851005+05:00", "level": "ERROR", "msg": "something went wrong", "env": "prod", "version": "123"}
